@@ -1,0 +1,5 @@
+#!/bin/bash
+
+ovs-vsctl add-port br0 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=192.168.28.20
+
+ovs-ofctl show br0
