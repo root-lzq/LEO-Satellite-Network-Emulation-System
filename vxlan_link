@@ -1,3 +1,5 @@
+#根据通断矩阵配置ovs2的流表 b801 --- b1600
+
 #!/usr/bin/python3.6
 
 from datetime import datetime
@@ -6,6 +8,10 @@ import concurrent.futures
 from multiprocessing import Process
 
 def add_flow(list_link):
+    # 将所有的流表命令拼接完毕，并放入书数组list_flow中
+    # list_flow ： string 类型数组，数组的每个元素为一条流表
+    #【参数】list_link : string 类型数组，数组的每个元素为通断矩阵的一行
+
      os.system('ovs-ofctl del-flows br0')
      for i in range(800,len(list_link)):
         z=""
@@ -24,6 +30,7 @@ def add_flow(list_link):
 
 
 def mul_process(i):
+    #获取每个进程的list_flow子数组
     for j in range(i*50, (i+1)*50):
         os.system(list_flow[j])
 
@@ -41,7 +48,8 @@ if __name__ == '__main__':
        #file_link = '/root/link_1600/'+str(num)+'.txt'
        file_link ='/home/xidian1208/Desktop/Manet720/routingp/link_1600/'+str(num)+'.txt'
        list_link=[]
-   
+
+       #读取文件
        with open(file_link, 'r+', encoding='utf-8') as file_obj:
            for content in file_obj:
                out_put = content.rstrip()
@@ -51,7 +59,8 @@ if __name__ == '__main__':
        print("finished read file")
        
        add_flow(list_link)
-
+       
+       #多进程程序
        process_list = []
        for i in range(16):
            p = Process(target=mul_process, args=(i,))

@@ -1,23 +1,26 @@
+#创建800个docker
+#docker name from b801 to b1600
+
 #!/usr/bin/python3.6
 
 import os
 
 
 def name_id(number):
+    #获取docker短id
+    #【参数】number：int; docker序列号
+    #【返回值】result : string ; docker短id
 
     import subprocess
-
     string = ' "name=^b' +str(number) + '$"'
-
     total_string = "docker ps -aqf{}".format(string)
-
     result=subprocess.getoutput(total_string)
-
     return result
 
-
-
 def process(docker_id):
+    #建立docker namespace
+    #【参数】docker_id : string； docker短id
+    #【返回值】result : int ; docker namespace pid
 
     import subprocess
 
@@ -28,6 +31,10 @@ def process(docker_id):
     return result
 
 def produce_mac(i):
+    #指定每个docker的ip，mac,并将其连接到ovs上
+    #【参数】i: int ; docker序列号，eg: 1,2,……
+    #【返回值】last : string; 将具有指定ip和mac地址的docker连接至ovs的语句
+
     array = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
     n = i
     if n >= 256:
@@ -42,6 +49,8 @@ def produce_mac(i):
     return last
 
 def create_docker(n):
+   #创建指定数量的docker
+   #[参数】n: int； docker 个数
 
    for i in range(801,n+1):
        #os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v /home/xidian1208/Desktop/Manet720:/root/Manet720 '+' centos_12_23')
@@ -64,7 +73,9 @@ def create_docker(n):
 
 
 def stop_rm (n):
-    
+    #停止并删除指定数量的docker [800,n]
+    #【参数】n: int; docker个数
+
     for i in range(800,n+1):
 
         name="docker stop b"+str(i)
@@ -79,7 +90,7 @@ def stop_rm (n):
 
 #print("start")
   
-os.system('ip -all netns del')
+os.system('ip -all netns del') #清除ip netns
 
 stop_rm(1600)
 
