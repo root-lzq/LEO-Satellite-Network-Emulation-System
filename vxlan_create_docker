@@ -1,0 +1,99 @@
+#!/usr/bin/python3.6
+
+import os
+
+
+def name_id(number):
+
+    import subprocess
+
+    string = ' "name=^b' +str(number) + '$"'
+
+    total_string = "docker ps -aqf{}".format(string)
+
+    result=subprocess.getoutput(total_string)
+
+    return result
+
+
+
+def process(docker_id):
+
+    import subprocess
+
+    total_string = "docker inspect -f '{{ .State.Pid }}' "+docker_id
+
+    result=subprocess.getoutput(total_string)
+
+    return result
+
+def produce_mac(i):
+    array = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
+    n = i
+    if n >= 256:
+        hundered = array[int(n/256)]
+        n = n - 256 * (int(n/256))
+    else:
+        hundered = array[0]
+    ten = array[int(n/16)]
+    one = array[n%16]
+    string = '"00:00:00:00:0'+hundered + ':' + ten + one +'"'
+    last = ' /root/ovs-docker add-port br0 eth0 b'+str(i)+' --ipaddress=10.0.'+str(int(i/254))+'.'+str(i%254+1)+'/16 --gateway=10.0.0.1 --macaddress={}'.format(string)
+    return last
+
+def create_docker(n):
+
+   for i in range(801,n+1):
+       #os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v /home/xidian1208/Desktop/Manet720:/root/Manet720 '+' centos_12_23')
+       os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' centos')
+
+
+       docker_id=name_id(i)
+
+       pid=process(docker_id)
+
+       namespace='ln -s /proc/'+str(pid)+'/ns/net /run/netns/'+docker_id
+
+       os.system(namespace)
+       os.system(produce_mac(i))
+       #os.system(' /root/ovs-docker add-port br0 eth0 b'+str(i)+' --ipaddress=10.0.'+str(int(i/254))+'.'+str(i%254+3)+'/16 --gateway=10.0.0.100')
+       #os.system(' /root/ovs-docker add-port br0 eth0 b'+str(i)+' --ipaddress=10.0.'+str(int(i/254))+'.'+str(i%254+1)+'/16 --gateway=10.0.0.1')  #attention path
+       #os.system(' /root/ovs-docker add-port br0 eth0 b'+str(i)+' --ipaddress=10.0.'+str(int(i/254))+'.'+str(i%254+1)+'/24') 
+       #os.system(' /root/ovs-docker add-port br0 eth0 b'+str(i)+' --ipaddress=172.0.'+str(int(i/254))+'.'+str(i%254+1)+'/24 --gateway=172.168.'+str(int(i/254))+'.'+str(i%254+1)) 
+   os.system('ip addr add 10.0.0.1/16 dev br0')
+
+
+def stop_rm (n):
+    
+    for i in range(800,n+1):
+
+        name="docker stop b"+str(i)
+
+        os.system(name)
+
+    for i in range(800,n+1):
+
+        name = "docker rm b" + str(i)
+
+        os.system(name)
+
+#print("start")
+  
+os.system('ip -all netns del')
+
+stop_rm(1600)
+
+os.system('ovs-vsctl del-br br0')
+
+os.system('ovs-vsctl add-br br0')
+
+os.system('ip link set br0 up')
+#print("stop")
+
+
+if os.path.exists('/run/netns')==False:
+
+    os.system('mkdir /run/netns') 
+
+create_docker(1600)
+
