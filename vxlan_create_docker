@@ -1,7 +1,8 @@
+#!/usr/bin/python3.6
+
 #创建800个docker
 #docker name from b801 to b1600
 
-#!/usr/bin/python3.6
 
 import os
 

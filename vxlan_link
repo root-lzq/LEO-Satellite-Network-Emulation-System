@@ -1,6 +1,7 @@
-#根据通断矩阵配置ovs2的流表 b801 --- b1600
-
 #!/usr/bin/python3.6
+
+
+#根据通断矩阵配置ovs2的流表 b801 --- b1600
 
 from datetime import datetime
 import os
