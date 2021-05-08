@@ -1,0 +1,66 @@
+#!/usr/bin/python3.6
+
+#一次性配置ovs2的流表 b801 --- b1600
+
+from datetime import datetime
+import os
+import concurrent.futures
+from multiprocessing import Process
+
+def add_flow(list_link):
+    # 将所有的流表命令拼接完毕，并放入书数组list_flow中
+    # list_flow ： string 类型数组，数组的每个元素为一条流表
+    #【参数】list_link : string 类型数组，数组的每个元素为通断矩阵的一行
+
+    os.system('ovs-ofctl del-flows br0')
+    for i in range(800,len(list_link)):
+        z=""
+        for j in range(1600,len(list_link[0]),2):
+           if list_link[i][j]=='1':
+               z=z+str(int(j/2)+1-800)+","
+        z = z + "801"
+        total_command= "in_port="+ str(i+1-800) + ",actions=output:"+z
+        list_flow.append(total_command)
+
+     
+if __name__ == '__main__':
+
+    dt=datetime.now()
+    num=dt.hour*60+dt.minute
+
+    while True:
+       flag=num
+       dt=datetime.now()
+       num=dt.hour*60+dt.minute+1
+       if flag==num:
+            continue
+       
+       file_link ='/home/xidian1208/Desktop/Manet720/routingp/link_1600/'+str(num)+'.txt'
+       list_link=[]
+
+       #读取文件
+       with open(file_link, 'r+', encoding='utf-8') as file_obj:
+           for content in file_obj:
+               out_put = content.rstrip()
+               if len(out_put):
+                  list_link.append(out_put)
+       list_flow=[]
+       
+       add_flow(list_link)
+             
+       filename = "/root/server2/flow_table"
+
+       print("start write file")
+       with open(filename, 'w+') as file_object:
+            for i in range(len(list_flow)):
+                 file_object.write(list_flow[i] + "\n")  
+       
+       print("finished write file")
+
+       os.system('ovs-ofctl add-flows br0 flow_table')       
+       
+       os.system('ovs-ofctl dump-flows br0')
+          
+       flag=num
+       print('-----------------'+str(num)+'---------'+str(num)+'--------------------------------------')
+
