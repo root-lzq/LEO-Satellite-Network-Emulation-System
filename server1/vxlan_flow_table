@@ -75,6 +75,7 @@ if __name__ == '__main__':
 
          print('start write file')
          
+         #对flow_table进行写操作
          filename = "/root/server1/flow_table"
          with open(filename, 'w+') as file_object:
              for i in range(len(list_flow)):
