@@ -51,7 +51,7 @@ if __name__ == '__main__':
        print("start write file")
     
        #对 flow_table 进行写入
-       filename = "/root/server2/flow_table"
+       filename = "/root/LEO-Satellite-Network-Emulation-System/server2/flow_table"
        with open(filename, 'w+') as file_object:
             for i in range(len(list_flow)):
                  file_object.write(list_flow[i] + "\n")  
