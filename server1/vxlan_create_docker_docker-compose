@@ -1,7 +1,15 @@
 #!/usr/bin/python3.6
 
-# 创建400个docker 
-# docker name from b1 to b400 
+# 创建200个docker 
+# docker name from b1 to b200 
+
+"""
+The results of tests show that this method docker-compose is not suitable for creating a large number of containers/services.
+It is recommended that the number of containers/services should be less than 200, otherwise it will take a long time to create containers/services.
+In the process of creating containers/services, you may encounter a WARNING "Connection pool is full, discarding Connection: localhost"
+If you can solve this WARNING, you may be able to use this method docker-compose to create far more than 200 containers/services in an acceptable time. Good luck!
+"""
+
 
 import os
 
@@ -120,7 +128,7 @@ os.system('ip link set br0 up')
 if os.path.exists('/run/netns')==False:
     os.system('mkdir /run/netns') 
 
-create_yaml(400)
+create_yaml(200)
 
 print('finished create_yaml')
 
@@ -128,5 +136,5 @@ os.system('docker-compose up -d')
 
 print('finish create docker')
 
-create_docker(400)
+create_docker(200)
 
