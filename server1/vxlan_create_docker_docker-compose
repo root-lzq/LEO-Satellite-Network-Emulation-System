@@ -31,9 +31,9 @@ def name_id(number):
 
 
 def process(docker_id):
-   # 建立docker namespace 
+   # 获取docker pid
    #【参数】 docker_id : string; docker短id
-   #【返回值】result : int ; docker namepace pid
+   #【返回值】result : int ; docker pid
 
     import subprocess
 
