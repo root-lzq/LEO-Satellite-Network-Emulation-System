@@ -93,12 +93,12 @@ def stop_rm (n):
   
 os.system('ip -all netns del') #清除ip netns
 
-stop_rm(1600)
+#stop_rm(1600)
+os.system("docker kill $(docker ps -q)")
+os.system("docker rm $(docker ps -a -q)")
 
 os.system('ovs-vsctl del-br br0')
-
 os.system('ovs-vsctl add-br br0')
-
 os.system('ip link set br0 up')
 #print("stop")
 
