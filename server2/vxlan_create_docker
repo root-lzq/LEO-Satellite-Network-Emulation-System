@@ -8,7 +8,7 @@ import os
 
 
 def name_id(number):
-    #获取docker短id
+    # 获取docker短id
     #【参数】number：int; docker序列号
     #【返回值】result : string ; docker短id
 
@@ -19,9 +19,9 @@ def name_id(number):
     return result
 
 def process(docker_id):
-    #建立docker namespace
+    # 获取docker pid
     #【参数】docker_id : string； docker短id
-    #【返回值】result : int ; docker namespace pid
+    #【返回值】result : int ; docker pid
 
     import subprocess
 
