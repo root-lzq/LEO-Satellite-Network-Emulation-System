@@ -1,5 +1,7 @@
 #!/usr/bin/python3.6
 
+#设置docker链路间的时延、带宽等参数
+
 from multiprocessing import Pool
 from datetime import datetime
 import os
