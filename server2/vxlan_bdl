@@ -1,0 +1,85 @@
+#!/usr/bin/python3.6
+
+#设置通信链路的时延、带宽等参数
+
+from multiprocessing import Pool
+from datetime import datetime
+import os
+import concurrent.futures
+
+
+def mul_bdl(i):
+    #为每个容器的网卡建立时延队列
+    #【参数】list_delay : 时延string数组，每一行是时延矩阵的一行
+
+    #test_num = len(list_delay)
+    #for i in range(100): #遍历每个元素
+         list_delay_split = list_delay[i].split() # 以空格为分割符，获得时延矩阵的每一行的时延参数数组
+         output_list = []
+
+         for j in range(len(list_delay_split)):
+             if list_delay_split[j] != '0.00000':
+                 output_list.append(j) #out_put存储时延不为0的元素序列号（ j>=0）; int
+
+         list_bdl = ['#!/bin/bash'] #存储带宽时延命令的数组
+
+         #建立带宽时延队列
+         list_bdl.append(' tc qdisc del dev eth0 root')
+         list_bdl.append(' tc qdisc add dev eth0 handle 1: root htb')
+         
+         for m in range(len(output_list)):
+             bandwidth_class = ' tc class add dev eth0 parent 1: classid 1:'+str(m+1)+' htb rate 10mbit ceil 10mbit'
+             list_bdl.append(bandwidth_class)
+
+             delay = int(float(list_delay_split[output_list[m]]) * 1000)
+             delay_qdisc = ' tc qdisc add dev eth0 parent 1:' +str(m+1)+" handle "+str(10*(m+1))+": netem delay "+str(delay)+"ms"
+             list_bdl.append(delay_qdisc)
+
+             ip_now = '10.0.'+str(int( (output_list[m]+1) / 254)) + '.'+ str( (output_list[m]+1) % 254 + 1)
+             filter_ip =' tc filter add dev eth0 protocol ip parent 1:0 u32 match ip dst '+ ip_now +" flowid 1:"+str(m+1)
+             list_bdl.append(filter_ip)
+
+         filename ='/root/LEO-Satellite-Network-Emulation-System/server2/mapping/b'+str(i+1)+'.sh' 
+
+         #将每个docker对应的网卡队列命令写入到mapping目录的对应文件中
+         with open(filename, 'w+') as file_object:
+             for n in range(len(list_bdl)):
+                 file_object.write(list_bdl[n] + "\n")
+
+         pre = 'docker exec -it b'+str(i+1)+' /bin/bash -c'
+         last =' " chmod a+x /mapping/b'+str(i+1)+'.sh && ./mapping/b'+str(i+1)+'.sh"'
+         total_command = pre+'{}'.format(last)
+         os.system(total_command)
+
+
+dt=datetime.now()
+num=dt.hour*60+dt.minute
+
+
+while True:
+    flag=num
+    dt=datetime.now()
+    num=dt.hour*60+dt.minute+1
+    if flag==num:
+       continue
+
+    file_delay='/root/1600_delay/'+str(num)+'.txt'
+    list_delay =[] #时延数组，每一行是时延矩阵的一行
+
+    with open(file_delay, 'r+', encoding='utf-8') as file_obj:
+        for content in file_obj:
+             out_put = content.rstrip()
+             if len(out_put):
+                 list_delay.append(out_put)
+
+    #多进程程序
+    list_order = []
+    for i in range(800, 900):
+        list_order.append(i)
+
+    with Pool(2) as pool:
+         pool.map(mul_bdl, list_order)
+            
+    flag=num
+    print('-----------------'+str(num)+'---------'+str(num)+'--------------------------------------')
+
