@@ -7,7 +7,7 @@ import os
 from multiprocessing import Process
 
 def produce_mac(i):
-    #为docker配置指定的mac地址
+    # 获取docker的mac地址
     #【参数】i : int; docker序列号
     #【返回值】string : string; docker的mac地址
     array = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
@@ -84,7 +84,6 @@ if __name__ == '__main__':
          print('finished write file')
 
          os.system('ovs-ofctl add-flows br0 flow_table')
-
          os.system('ovs-ofctl dump-flows br0')
 
          flag=num
