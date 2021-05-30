@@ -86,7 +86,8 @@ def mul_bdl(i):
          with open(filename, 'w+') as file_object:
              for n in range(len(list_bdl)):
                  file_object.write(list_bdl[n] + "\n")
-
+         
+         #进入到docker内部，执行建立参数队列的脚本
          pre = 'docker exec -it b'+str(i+1)+' /bin/bash -c'
          last =' " chmod a+x /mapping/b'+str(i+1)+'.sh && ./mapping/b'+str(i+1)+'.sh"'
          total_command = pre+'{}'.format(last)
