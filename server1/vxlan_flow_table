@@ -61,6 +61,10 @@ if __name__ == '__main__':
          num=dt.hour*60+dt.minute+1
          if flag==num:
              continue #一分钟内只设定一次流表格
+
+         diff_1 = datetime.now() 
+         configurate_time_start = diff_1.second #配置开始时间戳
+
          file_link = '/root/link_1600/'+str(num)+'.txt'
          list_link=[] # list_link : string类型的数组，数组的每个元素是通断矩阵的每一行
          list_flow=[] # list_flow : string 类型的数组，数组的每个元素为一条流表
@@ -73,7 +77,7 @@ if __name__ == '__main__':
                     list_link.append(out_put)
          add_flow(list_link)
 
-         print('start write file')
+         print(' start write file')
          
          #对flow_table进行写操作
          filename = "/root/LEO-Satellite-Network-Emulation-System/server1/flow_table"
@@ -81,10 +85,18 @@ if __name__ == '__main__':
              for i in range(len(list_flow)):
                  file_object.write(list_flow[i]+"\n")
 
-         print('finished write file')
+         print(' finished write file')
 
          os.system('ovs-ofctl add-flows br0 flow_table')
-         os.system('ovs-ofctl dump-flows br0')
-
+         #os.system('ovs-ofctl dump-flows br0')
+         
+         diff_2 = datetime.now()
+         configurate_time_end = diff_2.second #配置结束时间戳
          flag=num
-         print('-----------------'+str(num)+'---------'+str(num)+'--------------------------------------')
+         
+         #打印信息
+         print(' * Link on / off setting completed')
+         print(' * The serial number of the currently read file is '+str(num))
+         print(' * The configuration time is '+str(configurate_time_end-configurate_time_start)+'s')
+         print(' Waitting for the next state transition ……………………………………………………………………………………')
+         print(' ')
