@@ -104,6 +104,9 @@ while True:
     num=dt.hour*60+dt.minute+1
     if flag==num:
        continue
+    
+    diff_1 = datetime.now()
+    configurate_time_start = diff_1.second #配置开始时间戳
 
     file_delay='/root/1600_delay/'+str(num)+'.txt'
     list_delay =[] #时延数组，每一行是时延矩阵的一行
@@ -121,7 +124,18 @@ while True:
 
     with Pool(80) as pool:
          pool.map(mul_bdl, list_order)
-            
+
+    #qdl(list_delay)
+    diff_2 = datetime.now()
+    configurate_time_end = diff_2.second #配置结束时间戳
+
     flag=num
-    print('-----------------'+str(num)+'---------'+str(num)+'--------------------------------------')
+
+
+    #打印信息
+    print(' * Link delay setting completed')
+    print(' * The serial number of the currently read file is '+str(num))
+    print(' * The configuration time is '+str(configurate_time_end-configurate_time_start)+'s')
+    print(' Waitting for the next state transition ……………………………………………………………………………………')
+    print(' ')
 
