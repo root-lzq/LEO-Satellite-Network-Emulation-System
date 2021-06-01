@@ -48,9 +48,9 @@ def create_docker(n):
 
    for i in range(1,n+1):
        #os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v /home/xidian1208/Desktop/Manet720:/root/Manet720 '+' centos_12_23')     
-       path = '/root/LEO-Satellite-Network-Emulation-System/server1/mapping:/mapping'
-       os.system('chmod a+x /root/LEO-Satellite-Network-Emulation-System/server1/mapping')
-       os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v '+path+'  centos_tc')
+       path = '/root/LEO-Satellite-Network-Emulation-System/server1/mapping:/mapping' 
+       os.system('chmod a+x /root/LEO-Satellite-Network-Emulation-System/server1/mapping') 
+       os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v '+path+'  centos_tc') # 建立docker共享文件夹mapping，并将其映射到每个docker内部
 
        #docker_id=name_id(i)
        #pid=process(docker_id)
