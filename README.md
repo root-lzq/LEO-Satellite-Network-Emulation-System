@@ -5,6 +5,5 @@ The repository contains two folders *server1* and *server2*. *server1* and *serv
 * ***vxlan_bdl*** : realize the control of link parameters in **multi-process mode**.
 
 else :
-* *vxlan_link* : realize the flow table configuration of ovs in **multi-process mode**.
 * *flow_table* : a text file that contains zero or more flows in the same syntax, one per line.
-* *mapping* : a shared folder about the commands of the control of link parameters for dockers.
+
