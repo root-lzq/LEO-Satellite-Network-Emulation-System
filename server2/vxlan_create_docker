@@ -5,23 +5,6 @@
 
 import os
 
-def name_id(number):
-    # 获取docker短id
-    #【参数】number：int; docker序列号
-    #【返回值】result : string ; docker短id
-    import subprocess
-    string = ' "name=^b' +str(number) + '$"'
-    total_string = "docker ps -aqf{}".format(string)
-    result=subprocess.getoutput(total_string)
-    return result
-def process(docker_id):
-    # 获取docker pid
-    #【参数】docker_id : string； docker短id
-    #【返回值】result : int ; docker pid
-    import subprocess
-    total_string = "docker inspect -f '{{ .State.Pid }}' "+docker_id
-    result=subprocess.getoutput(total_string)
-    return result
 
 def produce_mac(i):
     #指定每个docker的ip，mac,并将其连接到ovs上
@@ -44,33 +27,25 @@ def produce_mac(i):
 def create_docker(n):
    #创建指定数量的docker
    #[参数】n: int； docker 个数
+   if os.path.exists('./mapping') == True:
+       os.system('rm -rf mapping')
+
+   path = '/root/LEO-Satellite-Network-Emulation-System/server2/mapping:/mapping'
 
    for i in range(801,n+1):
        #os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v /home/xidian1208/Desktop/Manet720:/root/Manet720 '+' centos_12_23')
-       path = '/root/LEO-Satellite-Network-Emulation-System/server2/mapping:/mapping'
-       os.system('chmod a+x /root/LEO-Satellite-Network-Emulation-System/server2/mapping')
        os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v '+path+'  centos_tc')#建立容器共享文件夹mapping，并将其映射到每个docker内部
-
-       #docker_id=name_id(i)
-       #pid=process(docker_id)
-       #namespace='ln -s /proc/'+str(pid)+'/ns/net /run/netns/'+docker_id
-       #os.system(namespace)
 
        os.system(produce_mac(i))
    os.system('ip addr add 10.0.0.1/16 dev br0')
 
   
-#os.system('ip -all netns del') #清除ip netns
-
 os.system("docker kill $(docker ps -q)")
 os.system("docker rm $(docker ps -a -q)")
 
 os.system('ovs-vsctl del-br br0')
 os.system('ovs-vsctl add-br br0')
 os.system('ip link set br0 up')
-
-#if os.path.exists('/run/netns')==False:
-#    os.system('mkdir /run/netns') 
 
 create_docker(1600)
 
