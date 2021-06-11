@@ -1,3 +1,6 @@
+#cp一份 /etc/pam.d/crond 文件，修改required-->sufficient
+
+
 #
 # The PAM configuration file for the cron daemon
 #
