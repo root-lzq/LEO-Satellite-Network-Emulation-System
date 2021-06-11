@@ -1,0 +1,12 @@
+#
+# The PAM configuration file for the cron daemon
+#
+#
+# Although no PAM authentication is called, auth modules
+# are used for credential setting
+auth       include    password-auth
+account    sufficient   pam_access.so
+account    include    password-auth
+session    sufficient  pam_loginuid.so
+session    include    password-auth
+
