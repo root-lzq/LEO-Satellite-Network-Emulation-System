@@ -1,5 +1,5 @@
 #!/bin/bash
-#为两台主机建立vxlan连接
+#建立vxlan连接
 #192.168.28.20为目的主机ip
 ovs-vsctl add-port br0 vxlan1 -- set interface vxlan1 type=vxlan options:remote_ip=192.168.28.20
 
