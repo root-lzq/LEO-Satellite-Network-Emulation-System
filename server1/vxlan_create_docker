@@ -58,7 +58,7 @@ def create_docker(n):
    os.system('ip addr add 10.0.0.100/16 dev br0')
 
 
-
+os.system('docker run -idt --name=test_delete centos')
 os.system('docker kill $(docker ps -q)')
 os.system('docker rm $(docker ps -a -q)')
 
