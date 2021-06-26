@@ -1,25 +1,55 @@
 #!/usr/bin/python3.6
 
-#一次性配置ovs2的流表 b801 --- b1600
+#一次性配置ovs2的流表 bn --- b(2*n)
 
 from datetime import datetime
 import os
 import concurrent.futures
 from multiprocessing import Process
 
-def add_flow(list_link):
+def produce_mac(i):
+    # 获取docker的mac地址
+    #【参数】i : int; docker序列号
+    #【返回值】string : string; docker的mac地址
+    array = ['0','1','2','3','4','5','6','7','8','9','A','B','C','D','E','F']
+    if i >= 256:
+        hundered = array[int(i/256)]
+        i = i - 256 * (int(i/256))
+    else:
+        hundered = array[0]
+    ten = array[int(i/16)]
+    one = array[i%16]
+    string = "00:00:00:00:0"+hundered + ":" + ten + one
+    return string
+
+def add_flow(list_link, n):
     # 将所有的流表命令拼接完毕，并放入书数组list_flow中
     # list_flow ： string 类型数组，数组的每个元素为一条流表
     #【参数】list_link : string 类型数组，数组的每个元素为通断矩阵的一行
+    # 【参数】n: docker 数量
 
     os.system('ovs-ofctl del-flows br0')
-    for i in range(800,len(list_link)):
+    
+    # [1, n] - [n+1, 2*n]的流表
+    for i in range(n):
+        s=""
+        for j in range(2*n, 4*n, 2):
+            if list_link[i][j]=='1':
+                s=s+str(int(j/2)+1-n)+","
+        if len(s):
+            string = produce_mac(i+1)
+            actions = string + ",actions=output:" + s[:-1]
+            total_command = "in_port="+str(n+1)",dl_src=" + actions
+            list_flow.append(total_command)
+    
+    # [n+1, 2*n] - [n+1, 2*n]的流表
+    for i in range(n, 2*n):
         z=""
-        for j in range(1600,len(list_link[0]),2):
+        for j in range(2*n, 4*n, 2):
            if list_link[i][j]=='1':
-               z=z+str(int(j/2)+1-800)+","
-        z = z + "801"
-        total_command= "in_port="+ str(i+1-800) + ",actions=output:"+z
+               z=z+str(int(j/2)+1-n)+","
+        z = z + str(n+1)
+        total_command= "in_port="+ str(i+1-n) + ",actions=output:"+z
         list_flow.append(total_command)
 
      
@@ -49,7 +79,7 @@ if __name__ == '__main__':
                   list_link.append(out_put)
        list_flow=[]
        
-       add_flow(list_link)
+       add_flow(list_link, 400)
              
        print("start write file")
     
