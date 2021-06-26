@@ -1,7 +1,7 @@
 #!/usr/bin/python3.6
 
-# 创建800个docker 
-# docker name from b1 to b800 
+# 创建n个docker 
+# docker name from b1 to bn
 
 import os
 
@@ -66,6 +66,6 @@ os.system('ovs-vsctl del-br br0')
 os.system('ovs-vsctl add-br br0')
 os.system('ip link set br0 up')
 
-create_docker(800)
+create_docker(400)
 
 
