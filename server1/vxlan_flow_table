@@ -49,7 +49,7 @@ def add_flow(list_link，n):
         if len(z):
             string = produce_mac(i+1)
             actions = string + ",actions=output:" + z[:-1]
-            total_command = "in_port=801,dl_src=" + actions
+            total_command = "in_port="+str(n+1)+",dl_src=" + actions
             list_flow.append(total_command)
 
 if __name__ == '__main__':
