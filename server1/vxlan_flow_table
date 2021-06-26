@@ -35,7 +35,7 @@ def add_flow(list_link，n):
         for j in range(0,2*n,2):
            if list_link[i][j]=='1':
                z=z+str(int(j/2)+1)+","
-        z = z + str(n) + '1' # vxlan端口号为容器个数+1
+        z = z + str(n+1)  # vxlan端口号为容器个数+1
         actions = str(i+1) + ",actions=output:" + z
         total_command = "in_port="+ actions
         list_flow.append(total_command)
