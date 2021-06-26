@@ -21,31 +21,34 @@ def produce_mac(i):
     string = "00:00:00:00:0"+hundered + ":" + ten + one
     return string
 
-def add_flow(list_link):
+def add_flow(list_link，n):
     #将所有的流表命令拼接完毕，并放入数组list_flow中。
     #【参数】list_link : string类型的数组，数组的每个元素是通断矩阵的每一行
+    # 【参数】 n: docker个数
     # list_flow : string 类型的数组，数组的每个元素为一条流表。
 
      os.system('ovs-ofctl del-flows br0')
-     for i in range(800):
+        
+     # [1，n]-[1-n]的流表
+     for i in range(n):
         z=''
-        for j in range(0,1600,2):
+        for j in range(0,2*n,2):
            if list_link[i][j]=='1':
                z=z+str(int(j/2)+1)+","
-        z = z + '801'
+        z = z + str(n) + '1' # vxlan端口号为容器个数+1
         actions = str(i+1) + ",actions=output:" + z
         total_command = "in_port="+ actions
         list_flow.append(total_command)
-
-     for j in range(1600, len(list_link[0]), 2):
-         s=''
-         for i in range(800):
-             if list_link[i][j] == '1':
-                 s=str(i+1)+","
-         if len(s):
-            string = produce_mac(int(j/2)+1)
-            #string = str( int(j/2) + 1 )
-            actions = string + ",actions=output:" + s[:-1]
+     
+     # [1,n]- [n+1, 2*n]的流表 
+     for i in range(n, 2*n):
+        z = ''
+        for j in range(0, 2*n, 2):
+            if list_link[i][j]=='1':
+                z=z+str(int(j/2)+1)+","
+        if len(z):
+            string = produce_mac(i+1)
+            actions = string + ",actions=output:" + z[:-1]
             total_command = "in_port=801,dl_src=" + actions
             list_flow.append(total_command)
 
@@ -75,7 +78,8 @@ if __name__ == '__main__':
                 out_put = content.rstrip()
                 if len(out_put):
                     list_link.append(out_put)
-         add_flow(list_link)
+                    
+         add_flow(list_link, 400);
 
          print(' start write file')
          
