@@ -21,7 +21,7 @@ def produce_mac(i):
     string = "00:00:00:00:0"+hundered + ":" + ten + one
     return string
 
-def add_flow(list_link，n):
+def add_flow(list_link, n):
     #将所有的流表命令拼接完毕，并放入数组list_flow中。
     #【参数】list_link : string类型的数组，数组的每个元素是通断矩阵的每一行
     # 【参数】 n: docker个数
