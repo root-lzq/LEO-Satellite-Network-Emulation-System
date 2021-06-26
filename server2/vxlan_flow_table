@@ -39,7 +39,7 @@ def add_flow(list_link, n):
         if len(s):
             string = produce_mac(i+1)
             actions = string + ",actions=output:" + s[:-1]
-            total_command = "in_port="+str(n+1)",dl_src=" + actions
+            total_command = "in_port="+str(n+1)+",dl_src=" + actions
             list_flow.append(total_command)
     
     # [n+1, 2*n] - [n+1, 2*n]的流表
