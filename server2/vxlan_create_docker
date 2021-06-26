@@ -1,7 +1,7 @@
 #!/usr/bin/python3.6
 
-#创建800个docker
-#docker name from b801 to b1600
+#创建n个docker
+#docker name from b(n+1) to b(2*n)
 
 import os
 
@@ -32,7 +32,7 @@ def create_docker(n):
 
    path = '/root/LEO-Satellite-Network-Emulation-System/server2/mapping:/mapping'
 
-   for i in range(801,n+1):
+   for i in range(n+1, 2*n+1):
        #os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v /home/xidian1208/Desktop/Manet720:/root/Manet720 '+' centos_12_23')
        os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v '+path+'  centos_tc')#建立容器共享文件夹mapping，并将其映射到每个docker内部
 
@@ -47,5 +47,5 @@ os.system('ovs-vsctl del-br br0')
 os.system('ovs-vsctl add-br br0')
 os.system('ip link set br0 up')
 
-create_docker(1600)
+create_docker(400)
 
