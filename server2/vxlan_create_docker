@@ -39,7 +39,7 @@ def create_docker(n):
        os.system(produce_mac(i))
    os.system('ip addr add 10.0.0.1/16 dev br0')
 
-  
+os.system('docker run -idt --name=test_delete centos') #使得当前系统至少存在一个容器，避免docker kill && docker rm 报错
 os.system("docker kill $(docker ps -q)")
 os.system("docker rm $(docker ps -a -q)")
 
