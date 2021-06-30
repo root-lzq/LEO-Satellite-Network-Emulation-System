@@ -73,7 +73,7 @@ os.system('mkdir /root/LEO-Satellite-Network-Emulation-System/server1/mapping')
 
 #多进程程序
 list_order = []
-for i in range(400):
+for i in range(400, 800):
     list_order.append(i)
 
 with Pool(40) as pool:
