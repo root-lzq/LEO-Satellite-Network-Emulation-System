@@ -57,7 +57,7 @@ if __name__ == '__main__':
 
     dt=datetime.now()
     num=dt.hour*60+dt.minute
-    count = 10; #文件序列号
+    count = 11; #文件序列号
     #while True:
     while count<21:
        flag=num
