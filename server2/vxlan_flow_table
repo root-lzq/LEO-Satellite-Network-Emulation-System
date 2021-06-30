@@ -95,7 +95,7 @@ if __name__ == '__main__':
        print("finished write file")
 
        os.system('ovs-ofctl add-flows br0 flow_table')              
-       os.system('ovs-ofctl dump-flows br0') 
+       #os.system('ovs-ofctl dump-flows br0') 
 
        diff_2 = datetime.now()
        configurate_time_end = diff_2.second #配置结束时间戳
