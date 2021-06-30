@@ -57,15 +57,16 @@ if __name__ == '__main__':
 
     dt=datetime.now()
     num=dt.hour*60+dt.minute
-    count = 11; #文件序列号
+    count = 11; #文件序列号 [11, 20]
     #while True:
-    while count<21:
+    while count<22:
        flag=num
        dt=datetime.now()
        num=dt.hour*60+dt.minute+1
        if flag==num:
             continue
-       
+       if count == 21: 
+           break
        diff_1 = datetime.now()
        configurate_time_start = diff_1.second #配置开始时间戳
 
