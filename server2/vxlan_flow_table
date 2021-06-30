@@ -57,8 +57,9 @@ if __name__ == '__main__':
 
     dt=datetime.now()
     num=dt.hour*60+dt.minute
-
-    while True:
+    count = 10; #文件序列号
+    #while True:
+    while count<21:
        flag=num
        dt=datetime.now()
        num=dt.hour*60+dt.minute+1
@@ -68,7 +69,8 @@ if __name__ == '__main__':
        diff_1 = datetime.now()
        configurate_time_start = diff_1.second #配置开始时间戳
 
-       file_link ='/home/xidian1208/Desktop/Manet720/routingp/link_1600/'+str(num)+'.txt'
+       #file_link ='/home/xidian1208/Desktop/Manet720/routingp/link_1600/'+str(num)+'.txt'
+       file_link ='/home/xidian1208/Desktop/Manet720/routingp/link_1600/'+str(count)+'.txt'
        list_link=[]
 
        #读取文件
@@ -101,9 +103,12 @@ if __name__ == '__main__':
        
        #打印说明
        print(' * Link on / off setting completed')
-       print(' * The serial number of the currently read file is '+str(num))
+       #print(' * The serial number of the currently read file is '+str(num))
+       print(' * The serial number of the currently read file is '+str(count))
        print(' * The configuration time is '+str(configurate_time_end-configurate_time_start)+'s')
        print(' Waitting for the next state transition ……………………………………………………………………………………')
        print(' ')
+
+       count = count + 1
 
 
