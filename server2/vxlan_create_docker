@@ -27,13 +27,14 @@ def produce_mac(i):
 def create_docker(n):
    #创建指定数量的docker
    #[参数】n: int； docker 个数
-   if os.path.exists('./mapping') == True:
-       os.system('rm -rf mapping')
+   #if os.path.exists('./mapping') == True:
+   #    os.system('rm -rf mapping')
 
-   path = '/root/LEO-Satellite-Network-Emulation-System/server2/mapping:/mapping'
+   #path = '/root/LEO-Satellite-Network-Emulation-System/server2/mapping:/mapping'
 
    for i in range(n+1, 2*n+1):
        #os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v /home/xidian1208/Desktop/Manet720:/root/Manet720 '+' centos_12_23')
+       path = '/root/LEO-Satellite-Network-Emulation-System/server1/mapping/b'+str(i)+':/bdl_file'
        os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v '+path+'  centos_tc')#建立容器共享文件夹mapping，并将其映射到每个docker内部
 
        os.system(produce_mac(i))
