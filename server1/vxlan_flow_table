@@ -57,8 +57,10 @@ if __name__ == '__main__':
     #获取当前时间
     dt=datetime.now()
     num=dt.hour*60+dt.minute
-
-    while True:
+    
+    count = 11 #统计10个文件
+    while count<21:
+    #while True:
          flag=num
          dt=datetime.now()
          num=dt.hour*60+dt.minute+1
@@ -68,7 +70,8 @@ if __name__ == '__main__':
          diff_1 = datetime.now() 
          configurate_time_start = diff_1.second #配置开始时间戳
 
-         file_link = '/root/link_1600/'+str(num)+'.txt'
+         #file_link = '/root/link_1600/'+str(num)+'.txt'
+         file_link = '/root/link_1600/'+str(count)+'.txt'
          list_link=[] # list_link : string类型的数组，数组的每个元素是通断矩阵的每一行
          list_flow=[] # list_flow : string 类型的数组，数组的每个元素为一条流表
 
@@ -97,10 +100,13 @@ if __name__ == '__main__':
          diff_2 = datetime.now()
          configurate_time_end = diff_2.second #配置结束时间戳
          flag=num
-         
+         #count = count+1 #次数加1
          #打印信息
          print(' * Link on / off setting completed')
-         print(' * The serial number of the currently read file is '+str(num))
+         #print(' * The serial number of the currently read file is '+str(num))
+         print(' * The serial number of the currently read file is '+str(count))
          print(' * The configuration time is '+str(configurate_time_end-configurate_time_start)+'s')
          print(' Waitting for the next state transition ……………………………………………………………………………………')
          print(' ')
+
+         count = count+1
