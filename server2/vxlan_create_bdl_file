@@ -24,7 +24,7 @@ def mul_bdl(i):
     # 生成容器时延配置文件
     #【参数】list_delay : 时延string数组，每一行是时延矩阵的一行
     #【参数】 i: 容器序列号-1; [0,n-1];
-    os.system('mkdir /root/LEO-Satellite-Network-Emulation-System/server1/mapping/b'+str(i+1))
+    os.system('mkdir /root/LEO-Satellite-Network-Emulation-System/server2/mapping/b'+str(i+1))
     for file_num in range(11, 21): # 文件个数区间 【11， 21】
          file_delay='/root/1600_delay/'+str(file_num)+'.txt'
          list_delay =[] #时延数组，每一行是时延矩阵的一行
@@ -59,7 +59,7 @@ def mul_bdl(i):
              filter_ip =' filter add dev eth0 protocol ip parent 1:0 u32 match ip dst '+ ip_now +" flowid 1:"+str(m+1)
              list_bdl.append(filter_ip)
 
-         filename ='/root/LEO-Satellite-Network-Emulation-System/server1/mapping/b'+str(i+1)+'/'+str(file_num)+'.txt' 
+         filename ='/root/LEO-Satellite-Network-Emulation-System/server2/mapping/b'+str(i+1)+'/'+str(file_num)+'.txt' 
          #将每个docker对应的网卡队列命令写入到mapping文件的对应文件中
          with open(filename, 'w+') as file_object:
              for n in range(len(list_bdl)):
@@ -69,7 +69,7 @@ def mul_bdl(i):
 
 if os.path.exists('./mapping') == True:
     os.system('rm -rf mapping')
-os.system('mkdir /root/LEO-Satellite-Network-Emulation-System/server1/mapping')
+os.system('mkdir /root/LEO-Satellite-Network-Emulation-System/server2/mapping')
 
 #多进程程序
 list_order = []
