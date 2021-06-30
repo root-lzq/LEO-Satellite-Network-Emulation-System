@@ -58,15 +58,16 @@ if __name__ == '__main__':
     dt=datetime.now()
     num=dt.hour*60+dt.minute
     
-    count = 11 #统计10个文件
-    while count<21:
+    count = 19 #统计10个文件
+    while count<22:
     #while True:
          flag=num
          dt=datetime.now()
          num=dt.hour*60+dt.minute+1
          if flag==num:
              continue #一分钟内只设定一次流表格
-
+         if count == 21: 
+             break
          diff_1 = datetime.now() 
          configurate_time_start = diff_1.second #配置开始时间戳
 
