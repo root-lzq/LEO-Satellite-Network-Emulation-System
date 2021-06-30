@@ -21,18 +21,15 @@ def name_id(number):
 
 
 def mul_bdl(i):
-    #为每个容器的网卡建立时延队列
+    # 生成容器时延配置文件
     #【参数】list_delay : 时延string数组，每一行是时延矩阵的一行
     #【参数】 i: 容器序列号-1; [0,n-1];
+    os.system('mkdir /root/LEO-Satellite-Network-Emulation-System/server1/mapping/b'+str(i+1))
+    for file_num in range(11, 21): # 文件个数区间 【11， 20】
+         file_delay='/root/1600_delay/'+str(file_num)+'.txt'
+         list_delay =[] #时延数组，每一行是时延矩阵的一行
 
-    if os.path.exists('./mapping') == True:
-       os.system('rm -rf mapping')
-       
-    for file_num in range(1, 1441): #遍历每个文件
-          file_delay='/root/1600_delay/'+str(file_num)+'.txt'
-          list_delay =[] #时延数组，每一行是时延矩阵的一行
-
-          with open(file_delay, 'r+', encoding='utf-8') as file_obj:
+         with open(file_delay, 'r+', encoding='utf-8') as file_obj:
               for content in file_obj:
                    out_put = content.rstrip()
                    if len(out_put):
@@ -67,7 +64,13 @@ def mul_bdl(i):
          with open(filename, 'w+') as file_object:
              for n in range(len(list_bdl)):
                  file_object.write(list_bdl[n] + "\n")
-         
+
+
+
+if os.path.exists('./mapping') == True:
+    os.system('rm -rf mapping')
+os.system('mkdir /root/LEO-Satellite-Network-Emulation-System/server1/mapping')
+
 #多进程程序
 list_order = []
 for i in range(400):
