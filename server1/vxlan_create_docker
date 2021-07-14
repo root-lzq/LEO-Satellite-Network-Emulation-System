@@ -46,15 +46,17 @@ def create_docker(n):
    #创建指定数量的docker
    #[参数】n: int ; docker个数
    
-  # if os.path.exists('./mapping') == True:
-  #     os.system('rm -rf mapping')
-  # path = '/root/LEO-Satellite-Network-Emulation-System/server1/mapping:/mapping'
+   if os.path.exists('./mapping') == True:
+       os.system('rm -rf mapping')
+   path = '/root/LEO-Satellite-Network-Emulation-System'
+   os.system('mkdir '+path+'/server1/mapping')
 
    for i in range(1,n+1):
        #os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v /home/xidian1208/Desktop/Manet720:/root/Manet720 '+' centos_12_23')
-       path = '/root/LEO-Satellite-Network-Emulation-System/server1/mapping/b'+str(i)+':/bdl_file'
-       os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v '+path+'  centos_tc ') # 建立docker共享文件夹mapping，并将其映射到每个docker内部
-
+       os.system('mkdir '+ path+'/server1/mapping/b'+str(i))
+       path1 = path+'/server1/mapping/b'+str(i)+':/bdl_file' #bdl 映射文件
+       path2 = path+'/create_dockerfile/update_cronjob:/update_cronjob' # cronjob 更新文件
+       os.system('docker run -idt --privileged=true --net=none --name=b'+str(i)+' -v '+path1+' -v '+path2+' centos_t_c') #建立docker共享文件夹mapping，并将其映射到每个docker内部
        os.system(produce_mac(i))
    os.system('ip addr add 10.0.0.100/16 dev br0')
 
