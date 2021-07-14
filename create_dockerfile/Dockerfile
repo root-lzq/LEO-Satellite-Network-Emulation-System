@@ -17,3 +17,4 @@ RUN chmod 0644 /etc/cron.d/cronjob
 # Apply cron job
 RUN crontab /etc/cron.d/cronjob
 
+CMD crond && tail -f /dev/null
