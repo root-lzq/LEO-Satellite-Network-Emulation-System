@@ -54,19 +54,39 @@ def add_flow(list_link, n):
 
 if __name__ == '__main__':
     
+    #设定仿真开始时间 h_start:m_start
+    h_start = 18
+    m_start = 12
+
+
+    #设定仿真时间/min
+    set_time =  2
+    count = 19 #仿真开始文件【统计10个文件】
+    end_count = set_time+count
+    print(' * Emulation starts at '+str(h_start)+':'+str(m_start))
+    print(' * Emulation time: '+str(set_time)+ ' minutes')
+    print(' * The serial number of the start file is '+str(count))
+    print(' ')
+
     #获取当前时间
-    dt=datetime.now()
-    num=dt.hour*60+dt.minute
+    while True:
+        dt=datetime.now()
+        num=dt.hour*60+dt.minute
     
-    count = 19 #统计10个文件
-    while count<22:
-    #while True:
+        h = dt.hour
+        m = dt.minute
+
+        if h == h_start and m == m_start:
+            break
+    
+    while True:
          flag=num
          dt=datetime.now()
          num=dt.hour*60+dt.minute+1
          if flag==num:
-             continue #一分钟内只设定一次流表格
-         if count == 21: 
+             continue #一分钟内只设定一次流表
+         if count == end_count :
+             print(' Completed, now time:'+str(datetime.now()))
              break
          diff_1 = datetime.now() 
          configurate_time_start = diff_1.second #配置开始时间戳
@@ -85,7 +105,6 @@ if __name__ == '__main__':
                     
          add_flow(list_link, 400);
 
-         print(' start write file')
          
          #对flow_table进行写操作
          filename = "/root/LEO-Satellite-Network-Emulation-System/server1/flow_table"
@@ -93,20 +112,17 @@ if __name__ == '__main__':
              for i in range(len(list_flow)):
                  file_object.write(list_flow[i]+"\n")
 
-         print(' finished write file')
-
          os.system('ovs-ofctl add-flows br0 flow_table')
-         #os.system('ovs-ofctl dump-flows br0')
          
          diff_2 = datetime.now()
          configurate_time_end = diff_2.second #配置结束时间戳
          flag=num
-         #count = count+1 #次数加1
          #打印信息
          print(' * Link on / off setting completed')
+         print(' * now time: '+ str(datetime.now()))
          #print(' * The serial number of the currently read file is '+str(num))
          print(' * The serial number of the currently read file is '+str(count))
-         print(' * The configuration time is '+str(configurate_time_end-configurate_time_start)+'s')
+         #print(' * The configuration time is '+str(configurate_time_end-configurate_time_start)+'s')
          print(' Waitting for the next state transition ……………………………………………………………………………………')
          print(' ')
 
